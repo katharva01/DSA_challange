@@ -44,28 +44,29 @@ class MergeSort{
 
         }
 
-        // public static void iterativeMergeSort(double[] arr){
-        //     // size is storing the lenth of sorted list which we are going to merge
-        //     int size =1;
-        //     while((int)Math.pow(2, size-1)<arr.length)
-        //     {
-        //         int start=0,mid=((int)Math.pow(2, size-1))-1,end=(int)Math.pow(2, size)-1;
+        public static void iterativeMergeSort(double[] arr){
+            // size is storing the lenth of sorted list which we are going to merge
+            int size =1;
+            while((int)Math.pow(2, size-1)<arr.length)
+            {
+                int start=0,mid=((int)Math.pow(2, size-1))-1,end=(int)Math.pow(2, size)-1;
 
-        //         // for merging 2 sublists for arrayLength/2**size times 
-        //         for(int i=0;i<(arr.length)/Math.pow(2, size);i++){
-        //             System.out.println(size);
-        //             merge(arr,start,mid,end);
-        //             for(int z=0;z<arr.length;z++){
-        //                 System.out.println(arr[z]+" "+count++);
-
-        //             }
-        //             start=start +(int)Math.pow(2, size);
-        //             mid=mid+(int)Math.pow(2, size);
-        //             end=end+(int)Math.pow(2, size);
-        //         }
+                // for merging 2 sublists for arrayLength/2**size times 
+                for(int i=0;i<(arr.length)/Math.pow(2, size);i++){
+                    if(end<arr.length){
+                   
+                    merge(arr,start,mid,end);
+                 
+                    start=start +(int)Math.pow(2, size);
+                    mid=mid+(int)Math.pow(2, size);
+                    end=end+(int)Math.pow(2, size);
+                }
+                }
+               
                 
-        //         size++;
-        //     }
+                size++;
+            }
+            }
         
             public static void mergeSort(double[] arr,int start,int end){
 
@@ -81,8 +82,9 @@ class MergeSort{
     
 
     public static void main(String[] args) {
-        double[] a =new double[]{555,85,5,87,56,67,252,48,7};
-        mergeSort(a,0,8);
+        double[] a =new double[]{555,85,5,87,56,67,252,48,9,7,32,3,45,6,788,65,3,4676,43,445,90,900};
+        iterativeMergeSort(a);
+        // mergeSort(a,0,8);
         for(int i=0;i<a.length;i++){
             System.out.println(a[i]);
         }
