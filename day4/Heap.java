@@ -1,105 +1,143 @@
-// array implementation of heap
 
-public class Heap
-{   int hep[]=new int[100];
-    int size = 0;
-    
-    public Heap(int[] arr){
-        int temp=arr.length-1;
-        while(temp>=0){
-            int i=arr.length-temp-1;
-            hep[i]=arr[i];
-            size++;
-            while(i!=0){
-                if(hep[(i-1)/2]<hep[i]){
-                    
-                    // swap(hep[(i-1)/2],hep[i]);
-                    
-                    int t =hep[(i-1)/2];
-                    hep[(i-1)/2]=hep[i];
-                    hep[i]=t;
-                }
-                 i=(i-1)/2;
-            }
-            temp--;
+
+public class Heap {
+    double[] heap ;
+    // size variable is used store the number of positions that are used by heap from overall capacity of heap
+    int size =0;
+
+    public static boolean isleaf(double[] arr,int node,int siz){
+        if(node<siz/2){
+            return false;
+        }else{
+            return true;
         }
     }
-    
-    // public static int swap(int i,int j){
-    //     int t =i;
-    //     i=j;
-    //     j=t;
-    //     return 0;
-    // }
-    
-    public int insert(int key){
-        hep[size]=key;
-        int temp = size;
-        size++;
-        
-        while(hep[temp]>hep[(temp-1)/2])
-        {   
-            int swa = hep[temp];
-            hep[temp]=hep[(temp-1)/2];
-            hep[(temp-1)/2]=swa;
-            
-            temp = (temp-1)/2;
-        }
-        
-        return temp;
+
+    public static int leftChildIndex(int parent){
+        return (2*parent+1);
+    }
+
+    public static int rightChildIndex(int parent){
+        return (2*parent+2);
+    }
+
+    public static int parentOf(int child){
+        return ((child-1)/2);
     }
     
-    public int delete(){
-          int swa = hep[0];
-          hep[0]=hep[size-1];
-          hep[size-1]=swa;
-          size--;
-          int i =0;
-          int parent=i;
-          int child=0;
-          if(hep[2*i+1]>hep[2*i+2]){
-            child=2*i+1 ;
-          }
-          else{
-            child=2*i+2;
-          }
-          while(hep[parent]<hep[child]){
+
+    public static void heapify(double arr[],int parent,int siz){
+        
+        if(isleaf( arr,parent,siz)){
+            return ;
+        }
+        
+        int child=parent ;
+
+        // if leftchild is grater than parent then child=leftChild
+        if(leftChildIndex(parent)<siz && arr[child]<arr[leftChildIndex(parent)] ){
+            child=leftChildIndex(parent);
+        }
+
+        // if rightchild is grater than parent then child=rightChild
+        if(rightChildIndex(parent)<siz && arr[child]<arr[rightChildIndex(parent)]  ){
+            child=rightChildIndex(parent);
+        }
+        
+        // if child value is changed from parent to any other value then definitely child is grater than parent
+        // so we swap child and parent
+        if(child!=parent){
+            double temp=arr[child];
+            arr[child]=arr[parent];
+            arr[parent]=temp;
             
-            int swa2 = hep[parent];
-            hep[parent]=hep[child];
-            hep[child]=swa2;
-            parent=child;
-            if(hep[2*parent+1]>hep[2*parent+2]){
-                child=2*parent+1 ;
-              }
-              else{
-                child=2*parent+2;
-              }
-          }
+            //after swapping we check and heapify new child node  
+            heapify(arr,child,siz);
+            
+        }
+
+    }
+
+    public Heap(double[] arr,int limit){
+        heap=new double[limit];
+        System.arraycopy(arr, 0, heap, 0, arr.length);;
+        size = arr.length;
          
+        for(int i= (size/2-1);i>=0;i--){
+            
+            heapify(heap,i,size);
+            
+        } 
+    } 
 
-	  return hep[size];  
+    public int insert(double num){
+        if(size<heap.length){
+            heap[size++]=num;
+            int parent=parentOf(size-1);
+            int child=size-1;
+            while(parent>=0 && heap[parent]<heap[child]){
+                double temp = heap[parent];
+                heap[parent]=heap[child];
+                heap[child]=temp;
+
+                child = parent;
+                parent = parentOf(child);
+ 
+            }
+            return child;
+        }
+        return -1;
     }
 
-    
-	public static void main(String[] args) {
-	    int[] a= new int[]{22,34,44,55,67,66,89,32,21,34};
-	    Heap h1 = new Heap(a);
-	    for(int j=0;j<h1.size;j++){
-		System.out.printf("%d %n",h1.hep[j]);
-	    }
-	    System.out.printf("size of heap is %d %n",h1.size);
-	    System.out.printf("key is inserted at  %d %n",h1.insert(64));
-	    System.out.printf("size of heap is %d %n",h1.size);
-	     for(int j=0;j<h1.size;j++){
-		System.out.printf("%d %n",h1.hep[j]);
-	    }
-        System.out.printf("element deleted is  %d %n",h1.delete());
-	    System.out.printf("size of heap is %d %n",h1.size);
-	     for(int j=0;j<h1.size;j++){
-		System.out.printf("%d %n",h1.hep[j]);
-	    }
-	}
-	
-	
+    public double delete(){
+       
+        if(size>1){
+        double temp = heap[0];
+        heap[0]=heap[size-1];
+        heap[size-1]=temp;
+        }
+
+        size--;
+        heapify(heap, 0, size);
+        return heap[size];
+        
+        
+    }
+
+    public static double[] heapSort(double[] arr){
+        Heap h=new Heap(arr,arr.length);
+        for(int i=h.size;i>0;i--){
+            h.delete();
+        }
+        return h.heap;
+    }
+
+    public static void main(String[] args) {
+        double[] arr = new double[]{2523,202,63,991};
+        arr=heapSort(arr);
+        System.out.print("The sorted array is : ");
+        for(int i=0;i<arr.length;i++){
+            System.out.print(arr[i]+" ");
+        }
+        System.out.println();
+        Heap h1=new Heap(arr,100);
+        for(int i=0;i<h1.size;i++){
+            System.out.print(h1.heap[i]+" ");
+        }
+        System.out.println();
+
+        System.out.println("added at index: " +h1.insert(888));
+        
+        for(int i=0;i<h1.size;i++){
+            System.out.print(h1.heap[i]+" ");
+        }
+        System.out.println();
+
+        System.out.println(h1.delete()+ " is deleted");
+        
+        for(int i=0;i<h1.size;i++){
+            System.out.print(h1.heap[i]+" ");
+        }
+        System.out.println();
+    }
 }
