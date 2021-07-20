@@ -82,7 +82,7 @@ class MergeSort{
     
 
     public static void main(String[] args) {
-        double[] a =new double[]{555,85,5,87,56,67,252,48,9,7,32,3,45,6,788,65,3,4676,43,445,90,900};
+        double[] a =new double[]{555,85,5,87,56,67,252,48,9,7};
         iterativeMergeSort(a);
         // mergeSort(a,0,8);
         for(int i=0;i<a.length;i++){
