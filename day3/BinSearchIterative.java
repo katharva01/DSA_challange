@@ -1,4 +1,7 @@
 
+
+package day3;
+
 public class BinSearchIterative
 {
     public static int binarySearch(Double A[],int n,Double key){
